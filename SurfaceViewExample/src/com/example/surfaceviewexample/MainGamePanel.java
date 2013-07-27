@@ -17,6 +17,7 @@ import android.view.SurfaceView;
 
 public class MainGamePanel extends SurfaceView implements
 		SurfaceHolder.Callback {
+	Devil devild;
 
 	/**
 	 * Eine Liste von Sprites.
@@ -69,6 +70,8 @@ public class MainGamePanel extends SurfaceView implements
 		circle = new Circle(MainGamePanel.this, kreis);
 		walk = BitmapFactory.decodeResource(getResources(), R.drawable.death_scythe);
 		devil = BitmapFactory.decodeResource(getResources(), R.drawable.devil);
+		devild = new Devil(MainGamePanel.this, devil, 100, 100);
+		spriteList.add(devild);
 		sprite = new Sprite(MainGamePanel.this, walk, 50, 50);
 		spriteList.add(sprite);
 		devilsprite = new Sprite (MainGamePanel.this, devil, 200, 200);

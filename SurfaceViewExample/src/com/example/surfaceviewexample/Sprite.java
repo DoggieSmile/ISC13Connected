@@ -14,7 +14,7 @@ public class Sprite {
 	 * jedem Threaddurchlauf neu gezeichnet wird. Verlangsamt die Bewegung des
 	 * Sprites.
 	 */
-	int timer = 0;
+	public int timer = 0;
 	// direction: 0 up, 1 left, 2 down, 3 right
 	// animation 0 down, 1 left, 3 up, 2 right
 	int[] DIRECTION_TO_ANIMATION_MAP = { 3, 1, 0, 2 };
@@ -33,7 +33,7 @@ public class Sprite {
 	/**
 	 * Geschwindigkeit, mit der sich der Sprite bewegen soll.
 	 */
-	int xSpeed, ySpeed;
+	public int xSpeed, ySpeed;
 	/**
 	 * Höhe und Breite des Bildes.
 	 */
@@ -49,11 +49,11 @@ public class Sprite {
 	/**
 	 * Momentane Richtung des Sprites.
 	 */
-	int currentFrame = 0;
+	public int currentFrame = 0;
 	/**
 	 * Anfangasrichtung des Sprites
 	 */
-	int direction = 2;
+	public int direction = 2;
 
 	// TODO anstatt hier alle objekte zu importieren, sollten objekte lieber
 	// alle von objekt erben, welche eine liste von objekten hält
@@ -123,13 +123,11 @@ public class Sprite {
 		canvas.drawBitmap(bmp, src, dst, null);
 
 	}
-
 	/**
 	 * Die update-Methode kann nicht von außen aufgerufen werden, weil sie nur
 	 * für Draw wichtig ist. Sie spezifiziert, wohin sich der Sprite bewegt.
 	 */
-	private void update() {
-
+	public void update(){
 		System.out.println("bin in update");
 
 		// 0 = down
@@ -174,6 +172,7 @@ public class Sprite {
 		// }
 	}
 
+	
 	/**
 	 * Wird für die Kollsionsabfrage benutzt und prüft, ob die Box, um das
 	 * Sprite innerhalb der Variablen x2 und y2 liegt.
@@ -198,7 +197,7 @@ public class Sprite {
 	 * 
 	 * @return Gibt die Spaltennummer zurück.
 	 */
-	private int getAnimationRow() {
+	public int getAnimationRow() {
 
 		double dirDouble = (Math.atan2(xSpeed, ySpeed) / (Math.PI / 2) + 2);
 
