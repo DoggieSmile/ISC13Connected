@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -35,7 +36,7 @@ public class MainGamePanel extends SurfaceView implements
 	/**
 	 * Bilder, die ben�tigt werden; werden in loadImage geladen.
 	 */
-	Bitmap kreis, walk;
+	Bitmap kreis, walk, devil;
 	/**
 	 * DebugTag
 	 */
@@ -47,7 +48,7 @@ public class MainGamePanel extends SurfaceView implements
 	/**
 	 * Das Spriteobjekt.
 	 */
-	Sprite sprite;
+	Sprite sprite, devilsprite;
 	/**
 	 * Der Spielthread.
 	 */
@@ -66,11 +67,13 @@ public class MainGamePanel extends SurfaceView implements
 	public boolean loadImages() {
 		kreis = BitmapFactory.decodeResource(getResources(), R.drawable.kreis);
 		circle = new Circle(MainGamePanel.this, kreis);
-		walk = BitmapFactory.decodeResource(getResources(),
-				R.drawable.death_scythe);
+		walk = BitmapFactory.decodeResource(getResources(), R.drawable.death_scythe);
+		devil = BitmapFactory.decodeResource(getResources(), R.drawable.devil);
 		sprite = new Sprite(MainGamePanel.this, walk, 50, 50);
 		spriteList.add(sprite);
-		
+		devilsprite = new Sprite (MainGamePanel.this, devil, 200, 200);
+		spriteList.add(devilsprite);
+
 		// BodyDef groundBodyDef = null;
 		// groundBodyDef.position.set(screenWidth, screenHeight);
 		return true;
@@ -105,11 +108,11 @@ public class MainGamePanel extends SurfaceView implements
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		// create game loop thread
-		//gameThread = new MainThread(getHolder(), this);
+		// gameThread = new MainThread(getHolder(), this);
 		screenHeight = this.getHeight();
 		screenWidth = this.getWidth();
-		//gameThread.setRunning(true);
-		//gameThread.start();
+		// gameThread.setRunning(true);
+		// gameThread.start();
 		startGameThread(getHolder(), this);
 		loadImages();
 	}
@@ -180,12 +183,17 @@ public class MainGamePanel extends SurfaceView implements
 	 *            Der Ort, an dem gezeichnet wird.
 	 */
 	protected void doDraw(Canvas canvas) {
-		canvas.drawColor(Color.BLACK);
 		canvas.drawARGB(255, 150, 150, 10);
-		circle.doDraw(canvas);
+
 		for (int i = 0; i < spriteList.size(); i++) {
 			spriteList.get(i).doDraw(canvas);
 		}
+		Paint p = new Paint();
+		p.setAntiAlias(true);
+		p.setColor(Color.RED);
+		circle.doDraw(canvas);
+		for (int i = 1; i < 5; i++)
+			canvas.drawCircle(i * 100, 50, 50, p);
 
 	}
 
@@ -251,12 +259,12 @@ public class MainGamePanel extends SurfaceView implements
 			gameThread.setRunning(true);
 			gameThread.start();
 			Log.d(TAG, "Neuer GameThread erstellt");
-//		} else if (!gameThread.getRunning()) {
-//			Log.d(TAG, "Setze GameThread auf Running und starte");
-//			gameThread.setRunning(true);
-//			gameThread.start();
-//			Log.d(TAG, "Gamethread auf Running + Start");
-		} else if (gameThread.getState() == Thread.State.TERMINATED){
+			// } else if (!gameThread.getRunning()) {
+			// Log.d(TAG, "Setze GameThread auf Running und starte");
+			// gameThread.setRunning(true);
+			// gameThread.start();
+			// Log.d(TAG, "Gamethread auf Running + Start");
+		} else if (gameThread.getState() == Thread.State.TERMINATED) {
 			Log.d(TAG, "Terminierten GameThread vernichten");
 			gameThread = null;
 			gameThread = new MainThread(this.surfaceHolder, this);
@@ -265,7 +273,7 @@ public class MainGamePanel extends SurfaceView implements
 			Log.d(TAG, "Vernichteter Thread wurde wiedergeboren");
 		}
 	}
-	
+
 	public void startGameThread(SurfaceHolder holder, MainGamePanel panel) {
 		if (gameThread == null) {
 			Log.d(TAG, "Erstelle neuen GameThread");
@@ -273,12 +281,12 @@ public class MainGamePanel extends SurfaceView implements
 			gameThread.setRunning(true);
 			gameThread.start();
 			Log.d(TAG, "Neuer GameThread erstellt");
-//		} else if (!gameThread.getRunning()) {
-//			Log.d(TAG, "Setze GameThread auf Running und starte");
-//			gameThread.setRunning(true);
-//			gameThread.start();
-//			Log.d(TAG, "Gamethread auf Running und Start gesetzt");
-		} else if (gameThread.getState() == Thread.State.TERMINATED){
+			// } else if (!gameThread.getRunning()) {
+			// Log.d(TAG, "Setze GameThread auf Running und starte");
+			// gameThread.setRunning(true);
+			// gameThread.start();
+			// Log.d(TAG, "Gamethread auf Running und Start gesetzt");
+		} else if (gameThread.getState() == Thread.State.TERMINATED) {
 			Log.d(TAG, "Terminierten GameThread vernichten");
 			gameThread = null;
 			gameThread = new MainThread(this.surfaceHolder, panel);

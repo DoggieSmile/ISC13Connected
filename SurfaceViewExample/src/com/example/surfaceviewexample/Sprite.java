@@ -9,12 +9,17 @@ import android.util.Log;
 
 public class Sprite {
 	private static final String TAG = MainThread.class.getSimpleName();
-
+	/**
+	 * Der Timer wird genutzt, um sicherzustellen, dass der Sprite nicht bei
+	 * jedem Threaddurchlauf neu gezeichnet wird. Verlangsamt die Bewegung des
+	 * Sprites.
+	 */
+	int timer = 0;
 	// direction: 0 up, 1 left, 2 down, 3 right
 	// animation 0 down, 1 left, 3 up, 2 right
 	int[] DIRECTION_TO_ANIMATION_MAP = { 3, 1, 0, 2 };
 	/**
-	 * Anzahl der Reihen des Bildes.	 	
+	 * Anzahl der Reihen des Bildes.
 	 */
 	private static final int BMP_ROWS = 4;
 	/**
@@ -96,16 +101,24 @@ public class Sprite {
 	 *            Canvas ist der Canvas, auf dem gezeichnet wird
 	 */
 	public void doDraw(Canvas canvas) {
-		update();
+		if (timer <4) {
+			timer += 1;
+		} else {
+			update();
+			timer = 0;
+		}
 		int srcX = currentFrame * width;
 		int srcY = getAnimationRow() * height;
 
 		Rect src = new Rect(srcX, srcY, srcX + width, srcY + height);
 		// size of sprite (sizeable)
-		Rect dst = new Rect(x, y, x + width, y + height); // x: Ecke oben links;
+		Rect dst = new Rect(x, y, x + width, y + height); // x: Ecke oben
+															// links;
 															// x+width: oben
-															// rechts; y: unten
-															// rechts; y+width:
+															// rechts; y:
+															// unten
+															// rechts;
+															// y+width:
 															// unten links
 		canvas.drawBitmap(bmp, src, dst, null);
 
@@ -116,6 +129,7 @@ public class Sprite {
 	 * für Draw wichtig ist. Sie spezifiziert, wohin sich der Sprite bewegt.
 	 */
 	private void update() {
+
 		System.out.println("bin in update");
 
 		// 0 = down
@@ -125,12 +139,12 @@ public class Sprite {
 		// facing down
 		if (x > gamePanel.screenWidth - width - xSpeed) {
 			xSpeed = 0;
-			ySpeed = 5;
+			ySpeed = 2;
 			direction = 0;
 			// going left
 		}
 		if (y > gamePanel.screenHeight - height - ySpeed) {
-			xSpeed = -5;
+			xSpeed = -2;
 			ySpeed = 0;
 			direction = 1;
 		}
@@ -138,17 +152,17 @@ public class Sprite {
 		if (x + xSpeed < 0) {
 			x = 0;
 			xSpeed = 0;
-			ySpeed = -5;
+			ySpeed = -2;
 			direction = 3;
 		}// facing right
 		if (y + ySpeed < 0) {
 			y = 0;
-			xSpeed = 5;
+			xSpeed = 2;
 			ySpeed = 0;
 			direction = 2;
 		}
 		try {
-			Thread.sleep(100);
+			Thread.sleep(10);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
