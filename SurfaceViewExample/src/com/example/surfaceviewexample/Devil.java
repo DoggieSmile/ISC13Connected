@@ -2,7 +2,7 @@ package com.example.surfaceviewexample;
 
 import android.graphics.Bitmap;
 
-public class Devil extends Sprite {
+public class Devil extends Sprite{
 
 	public Devil(MainGamePanel mainGamePanel, Bitmap walk, int xPos, int yPos) {
 		super(mainGamePanel, walk, xPos, yPos);

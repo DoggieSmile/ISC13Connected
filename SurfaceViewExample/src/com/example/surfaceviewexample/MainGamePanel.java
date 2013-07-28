@@ -17,7 +17,11 @@ import android.view.SurfaceView;
 
 public class MainGamePanel extends SurfaceView implements
 		SurfaceHolder.Callback {
+	
 	Devil devild;
+	Circle circleC;
+	
+	static List <StillImage> stillImageList = new ArrayList<StillImage>();
 
 	/**
 	 * Eine Liste von Sprites.
@@ -45,7 +49,7 @@ public class MainGamePanel extends SurfaceView implements
 	/**
 	 * Kreise, die ben�tigt werden.
 	 */
-	Circle circle;
+	StillImage circle;
 	/**
 	 * Das Spriteobjekt.
 	 */
@@ -54,10 +58,7 @@ public class MainGamePanel extends SurfaceView implements
 	 * Der Spielthread.
 	 */
 	private MainThread gameThread;
-	/**
-	 * Ein random-Wert.
-	 */
-	Random random;
+
 	SurfaceHolder surfaceHolder;
 
 	/**
@@ -67,10 +68,11 @@ public class MainGamePanel extends SurfaceView implements
 	 */
 	public boolean loadImages() {
 		kreis = BitmapFactory.decodeResource(getResources(), R.drawable.kreis);
-		circle = new Circle(MainGamePanel.this, kreis);
+		circleC = new Circle(MainGamePanel.this, kreis);
 		walk = BitmapFactory.decodeResource(getResources(), R.drawable.death_scythe);
 		devil = BitmapFactory.decodeResource(getResources(), R.drawable.devil);
 		devild = new Devil(MainGamePanel.this, devil, 100, 100);
+		stillImageList.add(circleC);
 		spriteList.add(devild);
 		sprite = new Sprite(MainGamePanel.this, walk, 50, 50);
 		spriteList.add(sprite);
@@ -161,7 +163,7 @@ public class MainGamePanel extends SurfaceView implements
 			x = event.getX();
 			y = event.getY();
 			for (int i = 0; i < spriteList.size(); i++) {
-				if (sprite.collision(x, y)) {
+				if (spriteList.get(i).collision(x, y)) {
 					spriteList.remove(i);
 					break;
 				}
@@ -173,8 +175,8 @@ public class MainGamePanel extends SurfaceView implements
 			y = event.getY();
 			break;
 		}
-		circle.setX(x);
-		circle.setY(y);
+		circleC.setX(x);
+		circleC.setY(y);
 		return true;
 
 	}
@@ -194,7 +196,10 @@ public class MainGamePanel extends SurfaceView implements
 		Paint p = new Paint();
 		p.setAntiAlias(true);
 		p.setColor(Color.RED);
-		circle.doDraw(canvas);
+		for (int i = 0; i < stillImageList.size(); i++) {
+			stillImageList.get(i).doDraw(canvas);
+		}
+//		circleC.doDraw(canvas);
 		for (int i = 1; i < 5; i++)
 			canvas.drawCircle(i * 100, 50, 50, p);
 
@@ -218,6 +223,7 @@ public class MainGamePanel extends SurfaceView implements
 					retry = false;
 					gameThread = null;
 					spriteList.clear();
+					stillImageList.clear();
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();

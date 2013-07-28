@@ -7,7 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.Log;
 
-public class Sprite {
+public class Sprite extends Object {
 	private static final String TAG = MainThread.class.getSimpleName();
 	/**
 	 * Der Timer wird genutzt, um sicherzustellen, dass der Sprite nicht bei
@@ -88,8 +88,7 @@ public class Sprite {
 		// this.ySpeed = 0;
 		Random rnd = new Random(System.currentTimeMillis());
 		xSpeed = rnd.nextInt(50) - 5;
-
-		ySpeed = rnd.nextInt(50) - 5;
+		
 	}
 
 	/**
@@ -205,5 +204,21 @@ public class Sprite {
 
 		return DIRECTION_TO_ANIMATION_MAP[direction];
 
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
 	}
 }

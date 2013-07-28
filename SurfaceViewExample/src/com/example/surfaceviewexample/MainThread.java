@@ -70,7 +70,7 @@ public class MainThread extends Thread {
 				continue;
 			}
 			try{
-			tickCount++;
+//			tickCount++;
 			canvas = surfaceHolder.lockCanvas();
 			synchronized(gamePanel.getHolder()){
 				if (canvas != null) {
@@ -84,7 +84,7 @@ public class MainThread extends Thread {
 			}
 			// update game state
 			// render state to the screen
-			Log.d(TAG, "Game loop executed " + tickCount + " times");
+//			Log.d(TAG, "Game loop executed " + tickCount + " times");
 		}
 	}
 }
