@@ -7,7 +7,9 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.Log;
 
-public class Sprite extends Object {
+public class Sprite {
+	boolean testcollision = false;
+	Collision collision;
 	private static final String TAG = MainThread.class.getSimpleName();
 	/**
 	 * Der Timer wird genutzt, um sicherzustellen, dass der Sprite nicht bei
@@ -87,7 +89,10 @@ public class Sprite extends Object {
 		// this.xSpeed = 5;
 		// this.ySpeed = 0;
 		Random rnd = new Random(System.currentTimeMillis());
-		xSpeed = rnd.nextInt(50) - 5;
+		xSpeed = rnd.nextInt(50) - 3;
+
+		ySpeed = rnd.nextInt(50) - 3;
+		
 		
 	}
 
@@ -127,7 +132,7 @@ public class Sprite extends Object {
 	 * für Draw wichtig ist. Sie spezifiziert, wohin sich der Sprite bewegt.
 	 */
 	public void update(){
-		System.out.println("bin in update");
+//		System.out.println("bin in update");
 
 		// 0 = down
 		// 1 = left
@@ -165,10 +170,10 @@ public class Sprite extends Object {
 			e.printStackTrace();
 		}
 		currentFrame = ++currentFrame % 4;
-		// if (!collision(xSpeed, ySpeed)) {
+		 if (!testcollision) {
 		x += xSpeed;
 		y += ySpeed;
-		// }
+		 }
 	}
 
 	
@@ -220,5 +225,21 @@ public class Sprite extends Object {
 
 	public void setWidth(int width) {
 		this.width = width;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
 	}
 }

@@ -17,16 +17,17 @@ import android.view.SurfaceView;
 
 public class MainGamePanel extends SurfaceView implements
 		SurfaceHolder.Callback {
-	
+
+	Collision collision;
 	Devil devild;
 	Circle circleC;
-	
-	static List <StillImage> stillImageList = new ArrayList<StillImage>();
+
+	List<StillImage> stillImageList = new ArrayList<StillImage>();
 
 	/**
 	 * Eine Liste von Sprites.
 	 */
-	private List<Sprite> spriteList = new ArrayList<Sprite>();
+	List<Sprite> spriteList = new ArrayList<Sprite>();
 	// hopefully is the same everywhere...
 	/**
 	 * Die Bildschirmh�he, die definiert wird, wenn das SpielPanel zum ersten
@@ -69,14 +70,15 @@ public class MainGamePanel extends SurfaceView implements
 	public boolean loadImages() {
 		kreis = BitmapFactory.decodeResource(getResources(), R.drawable.kreis);
 		circleC = new Circle(MainGamePanel.this, kreis);
-		walk = BitmapFactory.decodeResource(getResources(), R.drawable.death_scythe);
+		walk = BitmapFactory.decodeResource(getResources(),
+				R.drawable.death_scythe);
 		devil = BitmapFactory.decodeResource(getResources(), R.drawable.devil);
 		devild = new Devil(MainGamePanel.this, devil, 100, 100);
 		stillImageList.add(circleC);
 		spriteList.add(devild);
 		sprite = new Sprite(MainGamePanel.this, walk, 50, 50);
 		spriteList.add(sprite);
-		devilsprite = new Sprite (MainGamePanel.this, devil, 200, 200);
+		devilsprite = new Sprite(MainGamePanel.this, devil, 200, 200);
 		spriteList.add(devilsprite);
 
 		// BodyDef groundBodyDef = null;
@@ -188,6 +190,13 @@ public class MainGamePanel extends SurfaceView implements
 	 *            Der Ort, an dem gezeichnet wird.
 	 */
 	protected void doDraw(Canvas canvas) {
+		if (!spriteList.isEmpty()){
+			if(checkCollision(devilsprite)){
+				devilsprite.testcollision = true;
+			}else{
+				devilsprite.testcollision = false;
+			}
+		}
 		canvas.drawARGB(255, 150, 150, 10);
 
 		for (int i = 0; i < spriteList.size(); i++) {
@@ -199,7 +208,7 @@ public class MainGamePanel extends SurfaceView implements
 		for (int i = 0; i < stillImageList.size(); i++) {
 			stillImageList.get(i).doDraw(canvas);
 		}
-//		circleC.doDraw(canvas);
+		// circleC.doDraw(canvas);
 		for (int i = 1; i < 5; i++)
 			canvas.drawCircle(i * 100, 50, 50, p);
 
@@ -305,4 +314,89 @@ public class MainGamePanel extends SurfaceView implements
 		}
 	}
 
+	public List<StillImage> getStillImageList() {
+		return stillImageList;
+	}
+
+	public void setStillImageList(List<StillImage> stillImageList) {
+		this.stillImageList = stillImageList;
+	}
+
+	public List<Sprite> getSpriteList() {
+		return spriteList;
+	}
+
+	public void setSpriteList(List<Sprite> spriteList) {
+		this.spriteList = spriteList;
+	}
+	
+	
+	
+	private int width = 0;
+	private int height = 0;
+	private int x = 0;
+	private int y = 0;;
+	 boolean checkCollision(Sprite sprite) {
+			height = sprite.getHeight();
+			width = sprite.getWidth();
+			x = sprite.getX();
+			y = sprite.getY();
+//			Log.d("Devil", "spriteListSize: "+spriteList.size());
+			for (int i = 0; i < spriteList.size(); i++) {
+				int x2 = spriteList.get(i).x;
+				int y2 = spriteList.get(i).y;
+				int width2 = spriteList.get(i).getWidth() ;
+				int height2 = spriteList.get(i).getHeight();
+				if (!spriteList.get(i).equals(sprite))
+					if(collision(x2, y2, width2, height2))
+						return true;
+			}
+			for (int i = 0; i < stillImageList.size(); i++) {
+				int x2 = (int) stillImageList.get(i).getX();
+				int y2 = (int) stillImageList.get(i).getY();
+				int width2 = stillImageList.get(i).getWidth();
+				int height2 = stillImageList.get(i).getHeight();
+				if(collision(x2, y2, width2, height2)){
+					return true;
+				}
+			}
+			return false;
+		}
+
+		/**
+		 * Prüft zuerst für jeden einzelnen Eckpunkt des Objekts aus der List, ob es
+		 * innerhalb des übergebenen Sprites liegt und danach, ob einer der
+		 * Eckpunkte des Sprites innerhalb des Objektes aus der Liste liegt.
+		 * 
+		 * @param x2
+		 *            beschreibt den x-Wert des Objekts mit dem geprüft werden soll
+		 * @param y2
+		 *            beschreibt den y-Wert des Objekts mit dem geprüft werden soll
+		 * @param height2
+		 *            beschreibt die Höhe des Objektes mit dem geprüft werden soll
+		 * @param width2
+		 *            beschreibt die Breite des Objektes mit dem geprüft werden soll
+		 * @return gibt aus, ob eine Kollision vorliegt
+		 */
+		private boolean collision(int x2, int y2, int height2, int width2) {
+
+			boolean collision = false;
+			collision |= x2 > x && x2 < x + width && y2 > y && y2 < y + height;
+			collision |= x2 + width2 > x && x2 + width2 < x + width && y2 > y
+					&& y2 < y + height;
+			collision |= x2 + width2 > x && x2 + width2 < x + width
+					&& y2 + height2 > y && y2 + height2 < y + height;
+			collision |= x2 > x && x2 < x + width && y2 + height2 > y
+					&& y2 + height2 < y + height;
+
+			collision |= x > x2 && x < x2 + width2 && y > y2 && y < y2 + height2;
+			collision |= x + width > x2 && x + width < x2 + width2 && y > y2
+					&& y < y2 + height2;
+			collision |= x + width > x2 && x + width < x2 + width2
+					&& y + height > y2 && y + height < y2 + height2;
+			collision |= x > x2 && x < x2 + width2 && y + height > y2
+					&& y + height < y2 + height2;
+			Log.d("Collision", "Collision: "+collision);
+			return collision;
+		}
 }
