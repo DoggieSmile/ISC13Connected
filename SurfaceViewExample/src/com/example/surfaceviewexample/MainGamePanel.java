@@ -28,33 +28,41 @@ public class MainGamePanel extends SurfaceView implements
 	 * Eine Liste von Sprites.
 	 */
 	List<Sprite> spriteList = new ArrayList<Sprite>();
+	
 	// hopefully is the same everywhere...
 	/**
 	 * Die Bildschirmh�he, die definiert wird, wenn das SpielPanel zum ersten
 	 * Mal aufgerufen wird.
 	 */
 	static int screenHeight;
+	
 	/**
 	 * Die Bildschirmbreite, die definiert wird, wenn das SpielPanel zum ersten
 	 * Mal aufgerufen wird.
 	 */
 	static int screenWidth;
+	
 	/**
 	 * Bilder, die ben�tigt werden; werden in loadImage geladen.
 	 */
 	Bitmap kreis, walk, devil;
+	
 	/**
 	 * DebugTag
 	 */
 	private static final String TAG = MainThread.class.getSimpleName();
+	
 	/**
 	 * Kreise, die ben�tigt werden.
 	 */
+	
 	StillImage circle;
+	
 	/**
 	 * Das Spriteobjekt.
 	 */
 	Sprite sprite, devilsprite;
+	
 	/**
 	 * Der Spielthread.
 	 */
